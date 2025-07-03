@@ -51,10 +51,10 @@ public partial class Form1 : Form
 
         // ボタン1
         btn1 = new Button();
-        btn1.Text = "1";
+        btn1.Text = "①";
         btn1.Location = new Point(80, 50);
         btn1.Size = new Size(60, 40);
-        btn1.Click += (sender, e) => txtDisplay.Text += "1";
+        btn1.Click += (sender, e) => txtDisplay.Text += "①";
         Controls.Add(btn1);
 
         // ボタン2
