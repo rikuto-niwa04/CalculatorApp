@@ -1,0 +1,15 @@
+# Build Results
+bin/
+obj/
+*.dll
+*.exe
+*.pdb
+
+# Visual Studio
+.vs/
+*.user
+*.suo
+
+# その他
+*.cache
+*.json
