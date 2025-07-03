@@ -51,10 +51,10 @@ public partial class Form1 : Form
 
         // ボタン1
         btn1 = new Button();
-        btn1.Text = "①";
+        btn1.Text = "1";
         btn1.Location = new Point(80, 50);
         btn1.Size = new Size(60, 40);
-        btn1.Click += (sender, e) => txtDisplay.Text += "①";
+        btn1.Click += (sender, e) => txtDisplay.Text += "1";
         Controls.Add(btn1);
 
         // ボタン2
@@ -130,7 +130,7 @@ public partial class Form1 : Form
         btnPlus.Click += (sender, e) =>
         {
             previousValue = int.Parse(txtDisplay.Text);
-            txtDisplay.Text = "";
+            txtDisplay.Text = "+";
             operation = "+";
         };
         Controls.Add(btnPlus);
@@ -143,7 +143,7 @@ public partial class Form1 : Form
         btnminus.Click += (sender, e) =>
         {
             previousValue = int.Parse(txtDisplay.Text);
-            txtDisplay.Text = "";
+            txtDisplay.Text = "-";
             operation = "-";
         };
         Controls.Add(btnminus);
@@ -156,7 +156,7 @@ public partial class Form1 : Form
         btnMultiply.Click += (sender, e) =>
         {
             previousValue = int.Parse(txtDisplay.Text);
-            txtDisplay.Text = "";
+            txtDisplay.Text = "*";
             operation = "*";
         };
         Controls.Add(btnMultiply);
@@ -169,7 +169,7 @@ public partial class Form1 : Form
         btnDivide.Click += (sender, e) =>
         {
             previousValue = int.Parse(txtDisplay.Text);
-            txtDisplay.Text = "";
+            txtDisplay.Text = "/";
             operation = "/";
         };
         Controls.Add(btnDivide);
@@ -181,22 +181,44 @@ public partial class Form1 : Form
         btnEquals.Size = new Size(60, 40);
         btnEquals.Click += (sender, e) =>
         {
+        // 使用できる演算子を確認
+        char op = txtDisplay.Text.FirstOrDefault(c => "+-*/".Contains(c));
 
-        string[] parts = txtDisplay.Text.Split(new char[] { '+', '-', '*', '/' });
-        if (parts.Length == 2 && int.TryParse(parts[1], out currentValue))
+        // 演算子が見つからなければ何もしない
+        if (op == '\0')
         {
-            int result = operation switch
-            {
-                "+" => previousValue + currentValue,
-                "-" => previousValue - currentValue,
-                "*" => previousValue * currentValue,
-                "/" => currentValue != 0 ? previousValue / currentValue : 0,
-                _ => 0
-            };
-            txtDisplay.Text = result.ToString();
-            operation = "";
+        MessageBox.Show("演算子が見つかりませんでした");
+        return;
         }
-    };
+
+        string[] parts = txtDisplay.Text.Split(op);
+
+        if (parts.Length != 2)
+        {
+        MessageBox.Show("正しい形式ではありません（例：12+34）");
+        return;
+        }
+
+        // 前後の空白を除いてパース
+        if (int.TryParse(parts[0].Trim(), out int previousValue)
+        && int.TryParse(parts[1].Trim(), out int currentValue))
+        {
+        int result = op switch
+        {
+            '+' => previousValue + currentValue,
+            '-' => previousValue - currentValue,
+            '*' => previousValue * currentValue,
+            '/' => currentValue != 0 ? previousValue / currentValue : 0,
+            _ => 0
+        };
+
+        txtDisplay.Text = result.ToString();
+        }
+        else
+        {
+        MessageBox.Show("数値として認識できませんでした");
+        }
+        };
         Controls.Add(btnEquals);
     }
 }
