@@ -1,32 +1,184 @@
-namespace CalculatorApp;
+using System;
+using System.Data;
+using System.Drawing;
+using System.Windows.Forms;
 
-public partial class Form1 : Form
+namespace CalculatorApp
 {
-    private TextBox txtDisplay;
-    private Button btnClear;
-    private Button btn1;
-    private Button btn2;
-    private Button btn3;
-    private Button btn4;
-    private Button btn5;
-    private Button btn6;
-    private Button btn7;
-    private Button btn8;
-    private Button btn9;
-
-    private Button btnPlus;
-    private Button btnminus;
-    private Button btnMultiply;
-    private Button btnDivide;
-    private Button btnEquals;
-
-    private int currentValue = 0;
-    private int previousValue = 0;
-    private string operation = "";
-
-    public Form1()
+    public partial class Form1 : Form
     {
-        InitializeComponent();
+        private TextBox txtDisplay;
+
+        private int currentValue = 0;
+        private int previousValue = 0;
+        private string operation = "";
+
+        public Form1()
+        {
+        // TableLayoutPanelの作成
+        TableLayoutPanel panel = new TableLayoutPanel();
+        panel.Name = "panelButtons"; // 後で見つけやすいように名前をつけておく
+        panel.RowCount = 4;
+        panel.ColumnCount = 4;
+        panel.Size = new Size(400, 300);
+        panel.Location = new Point(10, 100);
+        panel.CellBorderStyle = TableLayoutPanelCellBorderStyle.Single; // 枠を見やすくする
+
+        // 行・列を均等に分割
+        for (int i = 0; i < 4; i++)
+        {
+            panel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 25));
+            panel.RowStyles.Add(new RowStyle(SizeType.Percent, 25));
+        }
+
+        // フォームに追加
+        this.Controls.Add(panel);
+
+        // 新規改修：ボタン「7」の作成
+        Button btn7 = new Button();
+        btn7.Text = "7";
+        btn7.Dock = DockStyle.Fill;
+        btn7.Font = new Font("Segoe UI", 16, FontStyle.Bold);
+        btn7.Click += (sender, e) => txtDisplay.Text += "7";
+
+        // 左上 (列:0, 行:0) に追加
+        panel.Controls.Add(btn7, 0, 0);
+
+        // ボタン「8」
+        Button btn8 = new Button();
+        btn8.Text = "8";
+        btn8.Dock = DockStyle.Fill;
+        btn8.Font = new Font("Segoe UI", 16, FontStyle.Bold);
+        btn8.Click += (sender, e) => txtDisplay.Text += "8";
+        panel.Controls.Add(btn8, 1, 0);  // 列:1, 行:0（7の右隣）
+
+        // ボタン「9」
+        Button btn9 = new Button();
+        btn9.Text = "9";
+        btn9.Dock = DockStyle.Fill;
+        btn9.Font = new Font("Segoe UI", 16, FontStyle.Bold);
+        btn9.Click += (sender, e) => txtDisplay.Text += "9";
+        panel.Controls.Add(btn9, 2, 0);  // 列:2, 行:0（8の右隣）
+
+        // ボタン「÷」
+        Button btnDivide = new Button();
+        btnDivide.Text = "÷";
+        btnDivide.Dock = DockStyle.Fill;
+        btnDivide.Font = new Font("Segoe UI", 16, FontStyle.Bold);
+        btnDivide.Click += (sender, e) => txtDisplay.Text += "/";
+        panel.Controls.Add(btnDivide, 3, 0);  // 列:3, 行:0（右端）
+
+        // ボタン「4」
+        Button btn4 = new Button();
+        btn4.Text = "4";
+        btn4.Dock = DockStyle.Fill;
+        btn4.Font = new Font("Segoe UI", 16, FontStyle.Bold);
+        btn4.Click += (sender, e) => txtDisplay.Text += "4";
+        panel.Controls.Add(btn4, 0, 1);  // 列:0, 行:1
+
+        // ボタン「5」
+        Button btn5 = new Button();
+        btn5.Text = "5";
+        btn5.Dock = DockStyle.Fill;
+        btn5.Font = new Font("Segoe UI", 16, FontStyle.Bold);
+        btn5.Click += (sender, e) => txtDisplay.Text += "5";
+        panel.Controls.Add(btn5, 1, 1);  // 列:1, 行:1
+
+        // ボタン「6」
+        Button btn6 = new Button();
+        btn6.Text = "6";
+        btn6.Dock = DockStyle.Fill;
+        btn6.Font = new Font("Segoe UI", 16, FontStyle.Bold);
+        btn6.Click += (sender, e) => txtDisplay.Text += "6";
+        panel.Controls.Add(btn6, 2, 1);  // 列:2, 行:1
+
+        // ボタン「×」
+        Button btnMultiply = new Button();
+        btnMultiply.Text = "×";
+        btnMultiply.Dock = DockStyle.Fill;
+        btnMultiply.Font = new Font("Segoe UI", 16, FontStyle.Bold);
+        btnMultiply.Click += (sender, e) => txtDisplay.Text += "*";
+        panel.Controls.Add(btnMultiply, 3, 1);  // 列:3, 行:1
+
+        // ボタン「1」
+        Button btn1 = new Button();
+        btn1.Text = "1";
+        btn1.Dock = DockStyle.Fill;
+        btn1.Font = new Font("Segoe UI", 16, FontStyle.Bold);
+        btn1.Click += (sender, e) => txtDisplay.Text += "1";
+        panel.Controls.Add(btn1, 0, 2);  // 列:0, 行:2
+
+        // ボタン「2」
+        Button btn2 = new Button();
+        btn2.Text = "2";
+        btn2.Dock = DockStyle.Fill;
+        btn2.Font = new Font("Segoe UI", 16, FontStyle.Bold);
+        btn2.Click += (sender, e) => txtDisplay.Text += "2";
+        panel.Controls.Add(btn2, 1, 2);  // 列:1, 行:2
+
+        // ボタン「3」
+        Button btn3 = new Button();
+        btn3.Text = "3";
+        btn3.Dock = DockStyle.Fill;
+        btn3.Font = new Font("Segoe UI", 16, FontStyle.Bold);
+        btn3.Click += (sender, e) => txtDisplay.Text += "3";
+        panel.Controls.Add(btn3, 2, 2);  // 列:2, 行:2
+
+        // ボタン「−」
+        Button btnMinus = new Button();
+        btnMinus.Text = "−";
+        btnMinus.Dock = DockStyle.Fill;
+        btnMinus.Font = new Font("Segoe UI", 16, FontStyle.Bold);
+        btnMinus.Click += (sender, e) => txtDisplay.Text += "-";
+        panel.Controls.Add(btnMinus, 3, 2);  // 列:3, 行:2
+
+        // ボタン「0」
+        Button btn0 = new Button();
+        btn0.Text = "0";
+        btn0.Dock = DockStyle.Fill;
+        btn0.Font = new Font("Segoe UI", 16, FontStyle.Bold);
+        btn0.Click += (sender, e) => txtDisplay.Text += "0";
+        panel.Controls.Add(btn0, 0, 3);  // 列:0, 行:3
+
+        // ボタン「C」（クリア）
+        Button btnClear = new Button();
+        btnClear.Text = "C";
+        btnClear.Dock = DockStyle.Fill;
+        btnClear.Font = new Font("Segoe UI", 16, FontStyle.Bold);
+        btnClear.Click += (sender, e) =>
+        {
+            txtDisplay.Text = "";
+        };
+        panel.Controls.Add(btnClear, 1, 3);  // 列:1, 行:3
+
+        // ボタン「=」
+        Button btnEqual = new Button();
+        btnEqual.Text = "=";
+        btnEqual.Dock = DockStyle.Fill;
+        btnEqual.Font = new Font("Segoe UI", 16, FontStyle.Bold);
+        btnEqual.Click += (sender, e) =>
+        {
+            try
+            {
+                // 簡易評価（将来的には独自ロジックに切り替える）
+                var result = new DataTable().Compute(txtDisplay.Text, null);
+                txtDisplay.Text = result.ToString();
+            }
+            catch
+            {
+                MessageBox.Show("計算に失敗しました。");
+            }
+        };
+        panel.Controls.Add(btnEqual, 2, 3);  // 列:2, 行:3
+
+        // ボタン「＋」
+        Button btnPlus = new Button();
+        btnPlus.Text = "+";
+        btnPlus.Dock = DockStyle.Fill;
+        btnPlus.Font = new Font("Segoe UI", 16, FontStyle.Bold);
+        btnPlus.Click += (sender, e) => txtDisplay.Text += "+";
+        panel.Controls.Add(btnPlus, 3, 3);  // 列:3, 行:3
+
         this.Size = new Size(1000, 500);
 
         // テキストボックス
@@ -34,189 +186,6 @@ public partial class Form1 : Form
         txtDisplay.Location = new Point(10, 10);
         txtDisplay.Size = new Size(260, 30);
         Controls.Add(txtDisplay);
-
-         // 正しいクリアボタン
-        btnClear = new Button();
-        btnClear.Text = "C";
-        btnClear.Location = new Point(10, 50);
-        btnClear.Size = new Size(60, 40);
-        btnClear.Click += (sender, e) =>
-        {
-            txtDisplay.Text = "";
-            currentValue = 0;
-            previousValue = 0;
-            operation = "";
-        };
-        Controls.Add(btnClear);
-
-        // ボタン1
-        btn1 = new Button();
-        btn1.Text = "1";
-        btn1.Location = new Point(80, 50);
-        btn1.Size = new Size(60, 40);
-        btn1.Click += (sender, e) => txtDisplay.Text += "1";
-        Controls.Add(btn1);
-
-        // ボタン2
-        btn2 = new Button();
-        btn2.Text = "2";
-        btn2.Location = new Point(150, 50);
-        btn2.Size = new Size(60, 40);
-        btn2.Click += (sender, e) => txtDisplay.Text += "2";
-        Controls.Add(btn2);
-
-         // ボタン3
-        btn3 = new Button();
-        btn3.Text = "3";
-        btn3.Location = new Point(220, 50);
-        btn3.Size = new Size(60, 40);
-        btn3.Click += (sender, e) => txtDisplay.Text += "3";
-        Controls.Add(btn3);
-
-
-          // ボタン4
-        btn4 = new Button();
-        btn4.Text = "4";
-        btn4.Location = new Point(10, 90);
-        btn4.Size = new Size(60, 40);
-        btn4.Click += (sender, e) => txtDisplay.Text += "4";
-        Controls.Add(btn4);
-
-          // ボタン5
-        btn5 = new Button();
-        btn5.Text = "5";
-        btn5.Location = new Point(80, 90);
-        btn5.Size = new Size(60, 40);
-        btn5.Click += (sender, e) => txtDisplay.Text += "5";
-        Controls.Add(btn5);
-
-          // ボタン6
-        btn6 = new Button();
-        btn6.Text = "6";
-        btn6.Location = new Point(150, 90);
-        btn6.Size = new Size(60, 40);
-        btn6.Click += (sender, e) => txtDisplay.Text += "6";
-        Controls.Add(btn6);
-
-          // ボタン7
-        btn7 = new Button();
-        btn7.Text = "7";
-        btn7.Location = new Point(10, 130);
-        btn7.Size = new Size(60, 40);
-        btn7.Click += (sender, e) => txtDisplay.Text += "7";
-        Controls.Add(btn7);
-
-          // ボタン8
-        btn8 = new Button();
-        btn8.Text = "8";
-        btn8.Location = new Point(80, 130);
-        btn8.Size = new Size(60, 40);
-        btn8.Click += (sender, e) => txtDisplay.Text += "8";
-        Controls.Add(btn8);
-
-          // ボタン9
-        btn9 = new Button();
-        btn9.Text = "9";
-        btn9.Location = new Point(150, 130);
-        btn9.Size = new Size(60, 40);
-        btn9.Click += (sender, e) => txtDisplay.Text += "9";
-        Controls.Add(btn9);
-
-        // 足し算ボタン
-        btnPlus = new Button();
-        btnPlus.Text = "+";
-        btnPlus.Location = new Point(290, 50);
-        btnPlus.Size = new Size(60, 40);
-        btnPlus.Click += (sender, e) =>
-        {
-            previousValue = int.Parse(txtDisplay.Text);
-            txtDisplay.Text += "+"; // ← 上書きではなく「追加」
-            operation = "+";
-        };
-        Controls.Add(btnPlus);
-
-        //引き算ボタン
-        btnminus = new Button();
-        btnminus.Text = "-";
-        btnminus.Location = new Point(360, 50);
-        btnminus.Size = new Size(60, 40);
-        btnminus.Click += (sender, e) =>
-        {
-            previousValue = int.Parse(txtDisplay.Text);
-            txtDisplay.Text += "-";
-            operation = "-";
-        };
-        Controls.Add(btnminus);
-
-        //掛け算ボタン
-        btnMultiply = new Button();
-        btnMultiply.Text = "*";
-        btnMultiply.Location = new Point(420, 50);
-        btnMultiply.Size = new Size(60, 40);
-        btnMultiply.Click += (sender, e) =>
-        {
-            previousValue = int.Parse(txtDisplay.Text);
-            txtDisplay.Text += "*";
-            operation = "*";
-        };
-        Controls.Add(btnMultiply);
-
-        //割り算ボタン
-        btnDivide = new Button();
-        btnDivide.Text = "/";
-        btnDivide.Location = new Point(490, 50);
-        btnDivide.Size = new Size(60, 40);
-        btnDivide.Click += (sender, e) =>
-        {
-            previousValue = int.Parse(txtDisplay.Text);
-            txtDisplay.Text += "/";
-            operation = "/";
-        };
-        Controls.Add(btnDivide);
-
-        // イコールボタン
-        btnEquals = new Button();
-        btnEquals.Text = "=";
-        btnEquals.Location = new Point(560, 50);
-        btnEquals.Size = new Size(60, 40);
-        btnEquals.Click += (sender, e) =>
-        {
-            char op = txtDisplay.Text.FirstOrDefault(c => "+-*/".Contains(c));
-
-            if (op == '\0')
-            {
-                MessageBox.Show("演算子が見つかりませんでした");
-                return;
-            }
-
-            string[] parts = txtDisplay.Text.Split(op);
-
-            if (parts.Length != 2)
-            {
-                MessageBox.Show("正しい形式ではありません（例：12+34）");
-                return;
-            }
-
-            if (int.TryParse(parts[0].Trim(), out int lhs) &&
-                int.TryParse(parts[1].Trim(), out int rhs))
-            {
-                int result = op switch
-                {
-                    '+' => lhs + rhs,
-                    '-' => lhs - rhs,
-                    '*' => lhs * rhs,
-                    '/' => rhs != 0 ? lhs / rhs : 0,
-                    _ => 0
-                };
-
-                txtDisplay.Text = result.ToString();
-            }
-            else
-            {
-                MessageBox.Show("数値として認識できませんでした");
-            }
-        };
-        Controls.Add(btnEquals);
     }
 }
-
+}
